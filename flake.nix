@@ -6,7 +6,7 @@
     nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-25.05";
 
     niri-stable.url = "github:YaLTeR/niri/v25.08";
-    niri-unstable.url = "github:YaLTeR/niri";
+    niri-unstable.url = "github:YaLTeR/niri?ref=pull/1634/head";
 
     xwayland-satellite-stable.url = "github:Supreeeme/xwayland-satellite/v0.7";
     xwayland-satellite-unstable.url = "github:Supreeeme/xwayland-satellite";

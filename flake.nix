@@ -3,7 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-25.05";
+    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-25.11";
 
     niri-stable.url = "github:YaLTeR/niri/v25.08";
     niri-unstable.url = "github:YaLTeR/niri?rev=17d0d0164c71b24a5333098cc5cdac5edcb55f90";
@@ -87,6 +87,7 @@
           seatd,
           libinput,
           libxkbcommon,
+          libdisplay-info_0_2 ? libdisplay-info,
           libdisplay-info,
           pango,
           withDbus ? true,
@@ -96,6 +97,7 @@
           fetchzip,
           runCommand,
         }:
+        assert libdisplay-info_0_2.version == "0.2.0";
         rustPlatform.buildRustPackage {
           pname = "niri";
           version = package-version src;
@@ -117,7 +119,7 @@
             libglvnd
             seatd
             libinput
-            libdisplay-info
+            libdisplay-info_0_2
             libxkbcommon
             pango
           ]
@@ -192,12 +194,12 @@
             + nixpkgs.lib.optionalString withDinit ''
               install -Dm0644 resources/dinit/niri{,-shutdown} -t $out/lib/dinit.d/user
             ''
-            # TODO: add nushell after nixos-25.11
             + ''
               installShellCompletion --cmd niri \
                 --bash <($out/bin/niri completions bash) \
                 --zsh <($out/bin/niri completions zsh) \
-                --fish <($out/bin/niri completions fish)
+                --fish <($out/bin/niri completions fish) \
+                --nushell <($out/bin/niri completions nushell)
 
               install -Dm0644 README.md resources/default-config.kdl -t $doc/share/doc/niri
               mv docs/wiki $doc/share/doc/niri/wiki
@@ -333,7 +335,7 @@
               '')
               {
                 nixos-unstable = nixpkgs;
-                "nixos-25.05" = nixpkgs-stable;
+                "nixos-25.11" = nixpkgs-stable;
               }
           )
         );

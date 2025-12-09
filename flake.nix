@@ -2,7 +2,7 @@
   description = "A scrollable-tiling Wayland compositor.";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs?rev=e9f00bd893984bc8ce46c895c3bf7cac95331127";
+    nixpkgs.url = "github:NixOS/nixpkgs?rev=17d0d0164c71b24a5333098cc5cdac5edcb55f90";
     nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-25.11";
 
     niri-stable.url = "github:YaLTeR/niri/v25.08";

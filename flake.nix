@@ -294,20 +294,30 @@
           };
         };
 
-      make-package-set = pkgs: {
-        niri-stable = pkgs.callPackage make-niri {
-          src = inputs.niri-stable;
+      make-package-set = pkgs:
+        let
+          # Fix capnproto CMake compatibility issue
+          pkgs' = pkgs.extend (final: prev: {
+            capnproto = prev.capnproto.overrideAttrs (oldAttrs: {
+              cmakeFlags = (oldAttrs.cmakeFlags or []) ++ [
+                "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+              ];
+            });
+          });
+        in {
+          niri-stable = pkgs'.callPackage make-niri {
+            src = inputs.niri-stable;
+          };
+          niri-unstable = pkgs'.callPackage make-niri {
+            src = inputs.niri-unstable;
+          };
+          xwayland-satellite-stable = pkgs'.callPackage make-xwayland-satellite {
+            src = inputs.xwayland-satellite-stable;
+          };
+          xwayland-satellite-unstable = pkgs'.callPackage make-xwayland-satellite {
+            src = inputs.xwayland-satellite-unstable;
+          };
         };
-        niri-unstable = pkgs.callPackage make-niri {
-          src = inputs.niri-unstable;
-        };
-        xwayland-satellite-stable = pkgs.callPackage make-xwayland-satellite {
-          src = inputs.xwayland-satellite-stable;
-        };
-        xwayland-satellite-unstable = pkgs.callPackage make-xwayland-satellite {
-          src = inputs.xwayland-satellite-unstable;
-        };
-      };
 
       combined-closure =
         pkgs-name: pkgs:

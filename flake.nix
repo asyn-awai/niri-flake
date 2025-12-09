@@ -296,14 +296,16 @@
 
       make-package-set = pkgs:
         let
-          # Fix capnproto CMake compatibility issue  
+          # Upgrade capnproto to 1.1.0 to fix CMake 4 compatibility
           pkgs' = pkgs.extend (final: prev: {
             capnproto = prev.capnproto.overrideAttrs (oldAttrs: {
-              postPatch = (oldAttrs.postPatch or "") + ''
-                # Fix cmake_minimum_required for CMake 4 compatibility
-                substituteInPlace c++/CMakeLists.txt \
-                  --replace 'cmake_minimum_required(VERSION 3.1)' 'cmake_minimum_required(VERSION 3.5)'
-              '';
+              version = "1.1.0";
+              src = prev.fetchFromGitHub {
+                owner = "capnproto";
+                repo = "capnproto";
+                rev = "v1.1.0";
+                hash = "sha256-hOSNC/0rSxvNMoq7Ox38iUTh4vp1kSBPU6FZVX9UpRA=";
+              };
             });
           });
         in {

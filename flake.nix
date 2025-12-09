@@ -296,12 +296,14 @@
 
       make-package-set = pkgs:
         let
-          # Fix capnproto CMake compatibility issue
+          # Fix capnproto CMake compatibility issue  
           pkgs' = pkgs.extend (final: prev: {
             capnproto = prev.capnproto.overrideAttrs (oldAttrs: {
-              cmakeFlags = (oldAttrs.cmakeFlags or []) ++ [
-                "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
-              ];
+              postPatch = (oldAttrs.postPatch or "") + ''
+                # Fix cmake_minimum_required for CMake 4 compatibility
+                substituteInPlace c++/CMakeLists.txt \
+                  --replace 'cmake_minimum_required(VERSION 3.1)' 'cmake_minimum_required(VERSION 3.5)'
+              '';
             });
           });
         in {
